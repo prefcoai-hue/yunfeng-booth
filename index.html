@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>云風聯展 22×6 · Yunfeng Booth｜雲峰展位 · 展場視覺提案</title>
+  <base href="https://prefcoai-hue.github.io/yunfeng-booth/" />
   <meta name="description" content="云風實業 PREFCO-JOHNSONTECH 聯展提案。22×6 m、三種風格、多角度 3D、平面配置。" />
   <meta property="og:title" content="云風聯展 22×6 · 展場視覺提案" />
   <meta property="og:description" content="PREFCO · EZCON · SUPRAFILTER 三種風格提案" />
@@ -12,8 +13,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #07070c; --fg: #ece8e1; --muted: #8f8b86;
-      --surface: #101016; --elev: #16161e; --line: #2a2a34;
+      --bg: #14151c; --fg: #f4f0ea; --muted: #b7b3ad;
+      --surface: #d8dde4; --elev: #1c1e28; --line: #343644;
       --accent: #7ee0ea; --accent-fg: #041014; --brand: #8e1b56;
     }
     * { box-sizing: border-box; }
@@ -41,8 +42,11 @@
     main { padding: 28px 0 64px; }
     .panel { display: none; }
     .panel.on { display: block; }
-    .hero { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
-    .hero img, .hero canvas { width: 100%; height: min(68vh, 760px); min-height: 320px; object-fit: cover; display: block; }
+    .hero { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #d8dde4; min-height: 320px; }
+    .hero img { width: 100%; height: min(68vh, 760px); min-height: 320px; object-fit: cover; display: block; }
+    .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .hero.live img { opacity: 0; pointer-events: none; position: absolute; inset: 0; }
+    .hero-tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 12px 0 0; }
     .chips { display: flex; gap: 6px; overflow-x: auto; padding: 12px 0; }
     .chips button { height: 40px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--elev); color: var(--muted); }
     .chips button.on { border-color: var(--accent); color: var(--fg); }
@@ -82,7 +86,7 @@
         </div>
       </div>
       <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <a class="share" href="https://prefcoai-hue.github.io/yunfeng-booth/" style="margin-right:8px;">prefcoai-hue.github.io/yunfeng-booth</a>
+        <a class="share" href="https://prefcoai-hue.github.io/yunfeng-booth/">prefcoai-hue.github.io/yunfeng-booth</a>
         <button class="btn ghost" type="button" onclick="navigator.clipboard.writeText('https://prefcoai-hue.github.io/yunfeng-booth/').then(()=>this.textContent='已複製').catch(()=>{})">複製網址</button>
         <button class="btn primary" data-view="pitch">提案簡報</button>
         <button class="btn ghost" onclick="window.print()">存 PDF</button>
@@ -100,12 +104,17 @@
 
   <main class="wrap">
     <section class="panel on" id="studio">
-      <div class="hero">
-        <img id="heroImg" alt="風格總覽" />
+      <div class="hero" id="heroBox">
+        <img id="heroImg" src="img/aurora-overview.jpg" alt="極光織幕 3/4 總覽" />
         <canvas id="three" hidden></canvas>
       </div>
+      <div class="hero-tools no-print">
+        <button class="btn primary" type="button" id="btn3d">啟動即時 3D（自動旋轉）</button>
+        <button class="btn ghost" type="button" id="btnPhoto">看渲染圖</button>
+        <span class="muted" id="modeHint">先顯示明亮渲染圖。要轉動模型再按 3D。</span>
+      </div>
       <div class="chips" id="cams"></div>
-      <p class="muted" style="font-size:14px;">拖曳 3D 可旋轉。若裝置不支援 WebGL，仍可看上方渲染圖。相機按鈕切視角說明。</p>
+      <p class="muted" style="font-size:14px;">渲染圖為提案主畫面。3D 可拖曳旋轉、滾輪縮放；進場後會自動緩慢旋轉。</p>
     </section>
 
     <section class="panel" id="plan">
@@ -283,7 +292,6 @@
       renderTabs();
       if (v==="gallery") renderGallery();
       if (v==="pitch") renderDeck();
-      if (v==="studio") start3d();
     }
     function setStyle(id) {
       style = id;
@@ -309,85 +317,172 @@
       if (e.key==="ArrowLeft") $("prev").click();
     });
 
-    $("cams").innerHTML = [["3/4 總覽","hero"],["走道人視","aisle"],["鳥瞰","bird"],["西側","west"],["東側","east"]]
-      .map(([l,id]) => `<button data-cam="${id}">${l}</button>`).join("");
-
     let three = null;
+    let want3d = false;
+    function showPhoto() {
+      want3d = false;
+      $("three").hidden = true;
+      $("heroBox").classList.remove("live");
+      $("heroImg").style.opacity = "1";
+      $("modeHint").textContent = "目前為明亮渲染圖。";
+    }
     async function start3d() {
       const canvas = $("three");
-      $("heroImg").hidden = false;
+      const heroBox = $("heroBox");
+      want3d = true;
+      $("modeHint").textContent = "載入 3D 模型中…";
       try {
         const THREE = await import("three");
         const { OrbitControls } = await import("three/addons/controls/OrbitControls.js");
+        if (!want3d) return;
         canvas.hidden = false;
-        $("heroImg").style.position="absolute"; $("heroImg").style.opacity="0";
-        if (three) { paint3d(); return; }
+        if (three) {
+          await new Promise((r) => requestAnimationFrame(r));
+          three.resize();
+          heroBox.classList.add("live");
+          three.ctrl.autoRotate = true;
+          $("modeHint").textContent = "3D 自動旋轉中 · 可拖曳、滾輪縮放";
+          paint3d();
+          return;
+        }
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xd5dae2);
-        scene.fog = new THREE.Fog(0xd5dae2, 24, 62);
+        scene.background = new THREE.Color(0xd8dde4);
         const cam = new THREE.PerspectiveCamera(40, 2, 0.1, 80);
         cam.position.set(9.6, 3.9, 6.4);
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setClearColor(0xd8dde4, 1);
         renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
         const ctrl = new OrbitControls(cam, canvas);
-        ctrl.target.set(0.2, 1.25, -2.3); ctrl.enableDamping = true;
-        scene.add(new THREE.HemisphereLight(0xf7f4ee, 0x9aa3ae, 1.2));
-        scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-        const sun = new THREE.DirectionalLight(0xfff4e6, 1.8); sun.position.set(9,16,8); scene.add(sun);
-        const floor = new THREE.Mesh(new THREE.PlaneGeometry(22,6), new THREE.MeshStandardMaterial({ color:0xd2cdc4, roughness:0.55 }));
-        floor.rotation.x = -Math.PI/2; floor.position.set(0,0,-3); scene.add(floor);
-        const hall = new THREE.Mesh(new THREE.PlaneGeometry(80,80), new THREE.MeshStandardMaterial({ color:0xc4c9d2, roughness:0.92 }));
-        hall.rotation.x = -Math.PI/2; hall.position.y = -0.02; scene.add(hall);
-        const back = new THREE.Mesh(new THREE.BoxGeometry(22,3.4,0.08), new THREE.MeshStandardMaterial({ color:0x3a3542 }));
-        back.position.set(0,1.7,-6.02); scene.add(back);
-        const loader = new THREE.TextureLoader();
-        const logoTex = loader.load("logo.png");
-        const logo = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.86), new THREE.MeshBasicMaterial({ map: logoTex, transparent:true }));
-        logo.position.set(0, 3.38, 0.18); scene.add(logo);
-        function tower(x,z,color) {
+        ctrl.target.set(0.2, 1.25, -2.3);
+        ctrl.enableDamping = true;
+        ctrl.autoRotate = true;
+        ctrl.autoRotateSpeed = 0.7;
+        scene.add(new THREE.HemisphereLight(0xffffff, 0xb0b6c0, 1.35));
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        const sun = new THREE.DirectionalLight(0xfff6ea, 2.0);
+        sun.position.set(9, 16, 8);
+        scene.add(sun);
+        const fill = new THREE.DirectionalLight(0xe8f4ff, 0.55);
+        fill.position.set(-8, 6, 4);
+        scene.add(fill);
+        const floor = new THREE.Mesh(
+          new THREE.PlaneGeometry(22, 6),
+          new THREE.MeshStandardMaterial({ color: 0xe4dfd6, roughness: 0.45 })
+        );
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.set(0, 0, -3);
+        scene.add(floor);
+        const hall = new THREE.Mesh(
+          new THREE.PlaneGeometry(80, 80),
+          new THREE.MeshStandardMaterial({ color: 0xd0d5de, roughness: 0.9 })
+        );
+        hall.rotation.x = -Math.PI / 2;
+        hall.position.y = -0.02;
+        scene.add(hall);
+        const ceil = new THREE.Mesh(
+          new THREE.PlaneGeometry(22, 6),
+          new THREE.MeshStandardMaterial({ color: 0xeef1f5, roughness: 0.85 })
+        );
+        ceil.rotation.x = Math.PI / 2;
+        ceil.position.set(0, 3.98, -3);
+        scene.add(ceil);
+        const back = new THREE.Mesh(
+          new THREE.BoxGeometry(22, 3.4, 0.08),
+          new THREE.MeshStandardMaterial({ color: 0x4a4552, emissive: 0x22182a, emissiveIntensity: 0.25 })
+        );
+        back.position.set(0, 1.7, -6.02);
+        scene.add(back);
+        const logoTex = new THREE.TextureLoader().load("logo.png");
+        const logo = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.7, 1.86),
+          new THREE.MeshBasicMaterial({ map: logoTex, transparent: true })
+        );
+        logo.position.set(0, 3.38, 0.18);
+        scene.add(logo);
+        function addTower(x, z, color) {
           const g = new THREE.Group();
-          for (let i=0;i<16;i++) {
-            const m = new THREE.Mesh(new THREE.BoxGeometry(0.04,3.5,0.12), new THREE.MeshStandardMaterial({ color, emissive:color, emissiveIntensity:0.8 }));
-            const a = (i/16)*Math.PI*2; m.position.set(Math.cos(a)*0.42, 1.75, Math.sin(a)*0.42); g.add(m);
+          for (let i = 0; i < 16; i++) {
+            const m = new THREE.Mesh(
+              new THREE.BoxGeometry(0.04, 3.5, 0.12),
+              new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.9 })
+            );
+            const a = (i / 16) * Math.PI * 2;
+            m.position.set(Math.cos(a) * 0.42, 1.75, Math.sin(a) * 0.42);
+            g.add(m);
           }
-          g.position.set(x,0,z); scene.add(g);
+          g.position.set(x, 0, z);
+          scene.add(g);
         }
-        function box(x,z,c) {
-          const m = new THREE.Mesh(new THREE.BoxGeometry(1.2,3.6,1.2), new THREE.MeshStandardMaterial({ color:c, emissive:c, emissiveIntensity:0.5 }));
-          m.position.set(x,1.8,z); scene.add(m);
+        function addVolume(x, z, c) {
+          const m = new THREE.Mesh(
+            new THREE.BoxGeometry(1.2, 3.6, 1.2),
+            new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.55 })
+          );
+          m.position.set(x, 1.8, z);
+          scene.add(m);
         }
-        const extras = new THREE.Group(); scene.add(extras);
-        three = { scene, cam, renderer, ctrl, extras, tower, box, THREE };
+        const extras = new THREE.Group();
+        scene.add(extras);
         function resize() {
-          const w = canvas.clientWidth, h = canvas.clientHeight;
-          renderer.setSize(w,h,false); cam.aspect = w/Math.max(h,1); cam.updateProjectionMatrix();
+          const w = Math.max(heroBox.clientWidth, 320);
+          const h = Math.max(heroBox.clientHeight, 320);
+          renderer.setSize(w, h, false);
+          cam.aspect = w / h;
+          cam.updateProjectionMatrix();
         }
-        addEventListener("resize", resize); resize();
-        (function loop(){ requestAnimationFrame(loop); ctrl.update(); renderer.render(scene,cam); })();
+        three = { scene, cam, renderer, ctrl, extras, addTower, addVolume, THREE, resize };
+        addEventListener("resize", resize);
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        resize();
+        renderer.render(scene, cam);
+        (function loop() {
+          requestAnimationFrame(loop);
+          if (!want3d) return;
+          ctrl.update();
+          renderer.render(scene, cam);
+        })();
+        heroBox.classList.add("live");
+        $("modeHint").textContent = "3D 自動旋轉中 · 可拖曳、滾輪縮放";
         $("cams").addEventListener("click", (e) => {
-          const b = e.target.closest("[data-cam]"); if (!b) return;
-          const map = { hero:[9.6,3.9,6.4], aisle:[0,1.62,5.2], bird:[0,13.5,0.6], west:[-13.5,2.3,-2.5], east:[13.5,2.3,-2.5] };
-          const p = map[b.dataset.cam]; if (!p) return;
-          cam.position.set(...p); ctrl.target.set(0.2,1.25,-2.3);
+          const b = e.target.closest("[data-cam]");
+          if (!b) return;
+          const map = { hero: [9.6, 3.9, 6.4], aisle: [0, 1.62, 5.2], bird: [0, 13.5, 0.6], west: [-13.5, 2.3, -2.5], east: [13.5, 2.3, -2.5] };
+          const p = map[b.dataset.cam];
+          if (!p) return;
+          cam.position.set(...p);
+          ctrl.target.set(0.2, 1.25, -2.3);
         });
         paint3d();
       } catch (err) {
         console.warn(err);
-        canvas.hidden = true;
-        $("heroImg").style.opacity = "1";
+        showPhoto();
+        $("modeHint").textContent = "此瀏覽器無法載入即時 3D，已改顯示渲染圖。";
       }
     }
     function paint3d() {
       if (!three) return;
-      const { extras, tower, box, THREE } = three;
+      const { extras, addTower, addVolume, THREE } = three;
       extras.clear();
-      if (style==="aurora") { tower(-3.15,-1.15,0xff3daa); tower(3.25,-1.15,0x00e5ff); }
-      if (style==="volume") { box(-6.4,-1.4,0x00b4e8); box(6.5,-1.4,0x00b4e8); }
-      if (style==="spine") {
-        const r = new THREE.Mesh(new THREE.PlaneGeometry(21.2,0.1), new THREE.MeshBasicMaterial({ color:0x5ee0f0 }));
-        r.rotation.x = -Math.PI/2; r.position.set(0,0.02,-2.4); extras.add(r);
+      if (style === "aurora") {
+        addTower(-3.15, -1.15, 0xff3daa);
+        addTower(3.25, -1.15, 0x00e5ff);
+      }
+      if (style === "volume") {
+        addVolume(-6.4, -1.4, 0x00b4e8);
+        addVolume(6.5, -1.4, 0x00b4e8);
+      }
+      if (style === "spine") {
+        const r = new THREE.Mesh(new THREE.PlaneGeometry(21.2, 0.1), new THREE.MeshBasicMaterial({ color: 0x5ee0f0 }));
+        r.rotation.x = -Math.PI / 2;
+        r.position.set(0, 0.02, -2.4);
+        extras.add(r);
       }
     }
+
+    $("btn3d").onclick = () => start3d();
+    $("btnPhoto").onclick = () => showPhoto();
+    $("cams").innerHTML = [["3/4 總覽","hero"],["走道人視","aisle"],["鳥瞰","bird"],["西側","west"],["東側","east"]]
+      .map(([l,id]) => `<button data-cam="${id}">${l}</button>`).join("");
 
     renderCards(); renderTabs(); setStyle("aurora"); setView("studio");
   </script>
