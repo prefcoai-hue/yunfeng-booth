@@ -1,94 +1,395 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yunfeng Booth｜雲峰展位</title>
+  <title>云風聯展 22×6 · Yunfeng Booth｜雲峰展位 · 展場視覺提案</title>
+  <meta name="description" content="云風實業 PREFCO-JOHNSONTECH 聯展提案。22×6 m、三種風格、多角度 3D、平面配置。" />
+  <meta property="og:title" content="云風聯展 22×6 · 展場視覺提案" />
+  <meta property="og:description" content="PREFCO · EZCON · SUPRAFILTER 三種風格提案" />
+  <link rel="icon" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0b1220;
-      --card: #121a2b;
-      --line: #243049;
-      --text: #e8eefc;
-      --muted: #9aa8c7;
-      --accent: #5b8cff;
+      --bg: #07070c; --fg: #ece8e1; --muted: #8f8b86;
+      --surface: #101016; --elev: #16161e; --line: #2a2a34;
+      --accent: #7ee0ea; --accent-fg: #041014; --brand: #8e1b56;
     }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "PingFang TC", "Noto Sans TC", sans-serif;
-      background:
-        radial-gradient(900px 400px at 10% -10%, #1b2a4d 0%, transparent 55%),
-        var(--bg);
-      color: var(--text);
+    html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: "Noto Sans TC", system-ui, sans-serif; }
+    button { font: inherit; cursor: pointer; }
+    h1, h2, h3 { font-family: Syne, "Noto Sans TC", sans-serif; text-wrap: balance; }
+    .wrap { max-width: 1440px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid var(--line); }
+    header .bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; }
+    .brand { display: flex; align-items: center; gap: 16px; }
+    .brand img { height: 64px; width: auto; }
+    .kicker { font-family: Syne, sans-serif; font-size: 11px; letter-spacing: .28em; color: var(--muted); text-transform: uppercase; margin: 0; }
+    .styles { display: grid; gap: 12px; padding: 16px 0 20px; }
+    @media (min-width: 800px) { .styles { grid-template-columns: 1fr 1fr 1fr; } }
+    .scard { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--elev); text-align: left; color: inherit; padding: 0; }
+    .scard.on { border-color: var(--accent); }
+    .scard img { width: 100%; aspect-ratio: 16/8; object-fit: cover; display: block; }
+    .scard .meta { display: flex; justify-content: space-between; gap: 8px; padding: 12px 16px; }
+    nav { position: sticky; top: 0; z-index: 20; background: rgba(7,7,12,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    nav .tabs { display: flex; gap: 4px; overflow-x: auto; padding: 8px 0; }
+    nav button, .btn { height: 44px; padding: 0 16px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); white-space: nowrap; }
+    nav button.on { background: var(--accent); color: var(--accent-fg); }
+    .btn.primary { background: var(--accent); color: var(--accent-fg); }
+    .btn.ghost { border: 1px solid var(--line); color: var(--fg); }
+    main { padding: 28px 0 64px; }
+    .panel { display: none; }
+    .panel.on { display: block; }
+    .hero { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+    .hero img, .hero canvas { width: 100%; height: min(68vh, 760px); min-height: 320px; object-fit: cover; display: block; }
+    .chips { display: flex; gap: 6px; overflow-x: auto; padding: 12px 0; }
+    .chips button { height: 40px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--elev); color: var(--muted); }
+    .chips button.on { border-color: var(--accent); color: var(--fg); }
+    .grid2 { display: grid; gap: 16px; }
+    @media (min-width: 800px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+    .grid3 { display: grid; gap: 16px; }
+    @media (min-width: 900px) { .grid3 { grid-template-columns: 1fr 1fr 1fr; } }
+    article, .card { border: 1px solid var(--line); border-radius: 12px; background: var(--elev); padding: 20px; }
+    .muted { color: var(--muted); }
+    .shot { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--elev); cursor: pointer; padding: 0; color: inherit; text-align: left; }
+    .shot img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .shot p { margin: 0; padding: 12px 16px; font-family: Syne, sans-serif; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; }
+    .lightbox { position: fixed; inset: 0; background: rgba(7,7,12,.92); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+    .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+    .share { font-size: 13px; color: var(--muted); }
+    .share a { color: var(--accent); }
+    #deck { min-height: 420px; }
+    #three { width: 100%; height: min(68vh, 760px); min-height: 320px; display: block; }
+    @media print {
+      nav, .no-print { display: none !important; }
+      .panel { display: block !important; break-after: page; }
+      body { background: #fff; color: #111; }
     }
-    main {
-      max-width: 880px;
-      margin: 0 auto;
-      padding: 64px 24px;
-    }
-    .badge {
-      display: inline-block;
-      border: 1px solid var(--line);
-      background: #162036;
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      letter-spacing: 0.04em;
-    }
-    h1 {
-      font-size: clamp(32px, 6vw, 52px);
-      line-height: 1.15;
-      margin: 18px 0 12px;
-    }
-    p { color: var(--muted); line-height: 1.7; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 36px;
-    }
-    article {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 20px;
-    }
-    article h2 { margin: 0 0 8px; font-size: 18px; }
-    footer {
-      margin-top: 48px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    a { color: var(--accent); }
   </style>
 </head>
 <body>
-  <main>
-    <span class="badge">GitHub Actions 自動部署</span>
-    <h1>雲峰展位<br />Yunfeng Booth</h1>
-    <p>
-      這是 <code>yunfeng-booth</code> 的起始頁。推送到 <code>main</code> 後，
-      GitHub Actions 會自動發布到 GitHub Pages。
-    </p>
-    <section class="grid">
-      <article>
-        <h2>CI</h2>
-        <p>Pull Request 與每次推送都會檢查必要檔案是否齊全。</p>
-      </article>
-      <article>
-        <h2>Pages</h2>
-        <p>通過檢查後，靜態站會發布到 GitHub Pages。</p>
-      </article>
-      <article>
-        <h2>Docker / GHCR</h2>
-        <p>打上 <code>v*</code> 標籤可建置映像並推到 GitHub Container Registry。</p>
-      </article>
+  <header>
+    <div class="wrap bar">
+      <div class="brand">
+        <img src="logo.png" alt="云風實業 PREFCO-JOHNSONTECH" />
+        <div>
+          <p class="kicker">PREFCO · EZCON · SUPRAFILTER</p>
+          <h1 style="margin:4px 0 0;font-size:22px;">云風聯展 <span class="muted" style="font-size:14px;font-weight:500;">22 × 6 m · 高 4.0 m · 132 ㎡</span></h1>
+        </div>
+      </div>
+      <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <a class="share" href="https://prefcoai-hue.github.io/yunfeng-booth/" style="margin-right:8px;">prefcoai-hue.github.io/yunfeng-booth</a>
+        <button class="btn ghost" type="button" onclick="navigator.clipboard.writeText('https://prefcoai-hue.github.io/yunfeng-booth/').then(()=>this.textContent='已複製').catch(()=>{})">複製網址</button>
+        <button class="btn primary" data-view="pitch">提案簡報</button>
+        <button class="btn ghost" onclick="window.print()">存 PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="styles" id="styleCards"></section>
+  </div>
+
+  <nav class="no-print">
+    <div class="wrap tabs" id="tabs"></div>
+  </nav>
+
+  <main class="wrap">
+    <section class="panel on" id="studio">
+      <div class="hero">
+        <img id="heroImg" alt="風格總覽" />
+        <canvas id="three" hidden></canvas>
+      </div>
+      <div class="chips" id="cams"></div>
+      <p class="muted" style="font-size:14px;">拖曳 3D 可旋轉。若裝置不支援 WebGL，仍可看上方渲染圖。相機按鈕切視角說明。</p>
     </section>
-    <footer>
-      prefcoai-hue / yunfeng-booth
-    </footer>
+
+    <section class="panel" id="plan">
+      <p class="kicker">平面 1:100</p>
+      <h2>22.0 × 6.0 m 配置</h2>
+      <p class="muted">南向走道開敞 22 m。西易控 6.8 m · 中超濾 8.4 m · 東 PREFCO 6.8 m。中後既有柱包覆為地標。</p>
+      <div class="card" style="overflow-x:auto;margin-top:16px;">
+        <svg viewBox="0 0 920 340" width="100%" role="img" aria-label="展場平面">
+          <rect x="56" y="48" width="792" height="216" fill="#0e0e14" stroke="#3a3a46"/>
+          <rect x="56" y="48" width="245" height="216" fill="rgba(94,224,240,.16)"/>
+          <rect x="301" y="48" width="302" height="216" fill="rgba(217,163,192,.14)"/>
+          <rect x="603" y="48" width="245" height="216" fill="rgba(122,160,200,.16)"/>
+          <rect x="430" y="188" width="32" height="32" fill="#8e1b56"/>
+          <text x="178" y="78" text-anchor="middle" fill="#ece8e1" font-family="Syne" font-size="13">EZCON</text>
+          <text x="452" y="78" text-anchor="middle" fill="#ece8e1" font-family="Syne" font-size="13">SUPRAFILTER</text>
+          <text x="726" y="78" text-anchor="middle" fill="#ece8e1" font-family="Syne" font-size="13">PREFCO</text>
+          <text x="178" y="96" text-anchor="middle" fill="#8f8b86" font-size="11">6.8 m · 易控</text>
+          <text x="452" y="96" text-anchor="middle" fill="#8f8b86" font-size="11">8.4 m · 超濾波器</text>
+          <text x="726" y="96" text-anchor="middle" fill="#8f8b86" font-size="11">6.8 m · 巧風</text>
+          <text x="452" y="36" text-anchor="middle" fill="#8f8b86" font-size="11" font-family="Syne">AISLE · 走道開敞面 22.0 m</text>
+          <text x="452" y="292" text-anchor="middle" fill="#8f8b86" font-size="11">背牆 · 主 LED</text>
+          <text x="30" y="160" fill="#8f8b86" font-size="11" transform="rotate(-90 30 160)">6.0 m</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="panel" id="gallery">
+      <p class="kicker">多角度 3D 立體圖</p>
+      <h2 id="galTitle">渲染</h2>
+      <div class="grid2" id="shots"></div>
+    </section>
+
+    <section class="panel" id="notes">
+      <p class="kicker">Design notes</p>
+      <h2>設計備註 · 各區分布與理念</h2>
+      <div class="card" style="margin:16px 0;">
+        <h3>共同策略</h3>
+        <ul class="muted">
+          <li>基地 22 × 6 m、限高 4.0 m，總面積 132 ㎡。細長半島，短邊 6 m 必須當端景。</li>
+          <li>既有結構柱約 900×900，三案皆包覆成地標：織幕／矩形 LED／360° 圖騰。</li>
+          <li>三品牌水平三分——易控 6.8 m｜超濾 8.4 m｜PREFCO 6.8 m。超濾居中。</li>
+          <li>前緣 1.5 m 開敞。云風主視覺 Logo 吊掛於 3.4–3.9 m，正面 + 兩端。</li>
+        </ul>
+      </div>
+      <div class="grid3">
+        <article><h3>A. 易控 EZCON · 西 0–6.8 m</h3><p class="muted">智慧建築 · AI Agent · 360 圖控。背牆互動屏、情境客廳、案例牆、控制箱剖切。</p></article>
+        <article><h3>B. 超濾波器 · 中 6.8–15.2 m</h3><p class="muted">SF-100A／150A／200A 真實櫃體並列。既有柱在此區。主 LED 牆 5.0 × 2.8 m。</p></article>
+        <article><h3>C. 巧風 PREFCO · 東 15.2–22 m</h3><p class="muted">UL 555 風門、認證牆、PREFCO-911。後側半封閉洽談。</p></article>
+      </div>
+      <div class="card" style="margin-top:16px;overflow-x:auto;">
+        <h3>三案對照</h3>
+        <table>
+          <thead><tr><th>項目</th><th>01 極光織幕</th><th>02 建築量體</th><th>03 能量脊骨</th></tr></thead>
+          <tbody>
+            <tr><td>性格</td><td>明亮 + LED 織幕</td><td>企業、日景、ISH</td><td>明亮工業軸線</td></tr>
+            <tr><td>主色</td><td>云風洋紅 × 青 × 淺地坪</td><td>云風圓標 × 青藍 × 橡木</td><td>云風圓標 × 青光 × 淺灰</td></tr>
+            <tr><td>柱的處理</td><td>織幕圓柱包覆</td><td>矩形 LED 量體</td><td>360° 圖騰</td></tr>
+            <tr><td>最適合若…</td><td>要在走道 30 m 外被記住</td><td>要談 UL／工程標案</td><td>要把三品牌說成一個系統</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="pitch">
+      <div class="grid2 no-print">
+        <article>
+          <p class="kicker" style="color:var(--accent)">線上</p>
+          <h3>遠端會議 · 螢幕分享</h3>
+          <p class="muted">1. 用下方簡報翻頁。<br>2. Meet／Teams／Zoom 分享此視窗。<br>3. 要走進空間時切「3D 立體」。</p>
+        </article>
+        <article>
+          <p class="kicker" style="color:var(--accent)">線下</p>
+          <h3>現場會議 · 圖板與 PDF</h3>
+          <p class="muted">1. 右上「存 PDF」，A3 橫式。<br>2. 會議桌並陳三張總覽。<br>3. 選定後用平面對施工。</p>
+        </article>
+      </div>
+      <div class="hero" style="margin-top:16px;">
+        <img id="deckImg" alt="簡報頁" />
+        <div style="padding:20px 24px;">
+          <p class="kicker" id="deckKicker"></p>
+          <h2 id="deckTitle" style="margin:8px 0;"></h2>
+          <p class="muted" id="deckBody"></p>
+        </div>
+      </div>
+      <div class="chips no-print">
+        <button type="button" id="prev">上一頁</button>
+        <span class="muted" id="deckN" style="align-self:center;"></span>
+        <button type="button" id="next">下一頁</button>
+      </div>
+    </section>
   </main>
+
+  <div class="lightbox" id="lb" hidden><img alt="" /></div>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  } }
+  </script>
+  <script type="module">
+    const STYLES = {
+      aurora: { id:"aurora", index:"01", name:"極光織幕", en:"AURORA MESH", tag:"明亮展廳 + LED 織幕",
+        thesis:"以圖 1 為母體，放在明亮展廳：LED 織幕圓柱、洋紅↔青漸層仍是主角，云風主視覺吊掛識別讓品牌在走道被讀到。",
+        hero:"img/aurora-overview.jpg",
+        shots:[
+          ["3/4 總覽","img/aurora-overview.jpg"],
+          ["內部人視","img/aurora-interior.jpg"],
+          ["高角度鳥瞰","img/aurora-aerial.jpg"],
+          ["長向軸線","img/aurora-axis.jpg"],
+          ["產品特寫","img/aurora-product.jpg"],
+        ]},
+      volume: { id:"volume", index:"02", name:"建築量體", en:"NORDIC VOLUME", tag:"歐陸 ISH / Light+Building",
+        thesis:"以圖 2 現場柱為母體：矩形量體、青藍 LED 包柱、懸浮混凝土天花、橡木接待。云風圓標掛於天花前緣。",
+        hero:"img/volume-overview.jpg",
+        shots:[
+          ["3/4 總覽","img/volume-overview.jpg"],
+          ["內部人視","img/volume-interior.jpg"],
+          ["高角度鳥瞰","img/volume-aerial.jpg"],
+          ["長向軸線","img/volume-axis.jpg"],
+        ]},
+      spine: { id:"spine", index:"03", name:"能量脊骨", en:"POWER SPINE", tag:"漢諾威工業展語彙",
+        thesis:"一條 22 m 能量軸貫穿三品牌：地板嵌光 + 天花脊骨 + 既有柱變成 360° LED 圖騰。明亮展廳，云風圓標為正面主識別。",
+        hero:"img/spine-overview.jpg",
+        shots:[
+          ["3/4 總覽","img/spine-overview.jpg"],
+          ["內部人視","img/spine-interior.jpg"],
+          ["高角度鳥瞰","img/spine-aerial.jpg"],
+          ["長向軸線","img/spine-axis.jpg"],
+        ]},
+    };
+    const VIEWS = [
+      ["studio","3D 立體"],["plan","平面配置"],["gallery","多角度渲染"],["notes","設計備註"],["pitch","提案簡報"],
+    ];
+    let style = "aurora";
+    let view = "studio";
+    let deckI = 0;
+    const slides = () => {
+      const s = Object.values(STYLES);
+      return [
+        { k:"PREFCO · EZCON · SUPRAFILTER", t:"云風聯展 展場提案", b:"22 × 6 m · 高 4.0 m · 132 ㎡。三種風格、同一套空間程式。主視覺為云風實業圓標。", img: STYLES.aurora.hero },
+        { k:"基地條件", t:"22 × 6 m · 限高 4.0 m", b:"走道開敞 22 m。易控 6.8 m｜超濾 8.4 m｜PREFCO 6.8 m。既有柱包覆成地標。", img: STYLES.volume.hero },
+        ...s.map(x => ({ k:`${x.index}  ${x.en}`, t:x.name, b:x.thesis, img:x.hero })),
+        { k:"決策", t:"三案怎麼選", b:"同一平面、同一柱位、同一產品。只換材料、光線與結構語言。", img: STYLES.spine.hero },
+      ];
+    };
+
+    const $ = (id) => document.getElementById(id);
+    function renderCards() {
+      $("styleCards").innerHTML = Object.values(STYLES).map(s => `
+        <button class="scard ${s.id===style?"on":""}" data-style="${s.id}">
+          <img src="${s.hero}" alt="${s.name}" />
+          <div class="meta"><span><small class="muted">${s.index} ${s.en}</small><br><strong>${s.name}</strong></span><small class="muted">${s.tag}</small></div>
+        </button>`).join("");
+    }
+    function renderTabs() {
+      $("tabs").innerHTML = VIEWS.map(([id,l]) => `<button class="${id===view?"on":""}" data-view="${id}">${l}</button>`).join("");
+    }
+    function renderGallery() {
+      const s = STYLES[style];
+      $("galTitle").textContent = s.name + " · 多角度";
+      $("shots").innerHTML = s.shots.map(([a,src]) => `<button class="shot" data-src="${src}"><img src="${src}" alt="${a}" /><p>${a}</p></button>`).join("");
+    }
+    function renderDeck() {
+      const sl = slides()[deckI];
+      $("deckImg").src = sl.img;
+      $("deckKicker").textContent = sl.k;
+      $("deckTitle").textContent = sl.t;
+      $("deckBody").textContent = sl.b;
+      $("deckN").textContent = `${deckI+1} / ${slides().length}`;
+    }
+    function setView(v) {
+      view = v;
+      document.querySelectorAll(".panel").forEach(p => p.classList.toggle("on", p.id===v));
+      renderTabs();
+      if (v==="gallery") renderGallery();
+      if (v==="pitch") renderDeck();
+      if (v==="studio") start3d();
+    }
+    function setStyle(id) {
+      style = id;
+      $("heroImg").src = STYLES[id].hero;
+      $("heroImg").alt = STYLES[id].name;
+      renderCards();
+      if (view==="gallery") renderGallery();
+      paint3d();
+    }
+    document.body.addEventListener("click", (e) => {
+      const st = e.target.closest("[data-style]"); if (st) setStyle(st.dataset.style);
+      const vw = e.target.closest("[data-view]"); if (vw) setView(vw.dataset.view);
+      const sh = e.target.closest(".shot");
+      if (sh) { const lb=$("lb"); lb.hidden=false; lb.querySelector("img").src=sh.dataset.src; }
+    });
+    $("lb").onclick = () => $("lb").hidden = true;
+    $("prev").onclick = () => { deckI=Math.max(0,deckI-1); renderDeck(); };
+    $("next").onclick = () => { deckI=Math.min(slides().length-1,deckI+1); renderDeck(); };
+    window.addEventListener("keydown", (e) => {
+      if (e.key==="Escape") $("lb").hidden = true;
+      if (view!=="pitch") return;
+      if (e.key==="ArrowRight") $("next").click();
+      if (e.key==="ArrowLeft") $("prev").click();
+    });
+
+    $("cams").innerHTML = [["3/4 總覽","hero"],["走道人視","aisle"],["鳥瞰","bird"],["西側","west"],["東側","east"]]
+      .map(([l,id]) => `<button data-cam="${id}">${l}</button>`).join("");
+
+    let three = null;
+    async function start3d() {
+      const canvas = $("three");
+      $("heroImg").hidden = false;
+      try {
+        const THREE = await import("three");
+        const { OrbitControls } = await import("three/addons/controls/OrbitControls.js");
+        canvas.hidden = false;
+        $("heroImg").style.position="absolute"; $("heroImg").style.opacity="0";
+        if (three) { paint3d(); return; }
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xd5dae2);
+        scene.fog = new THREE.Fog(0xd5dae2, 24, 62);
+        const cam = new THREE.PerspectiveCamera(40, 2, 0.1, 80);
+        cam.position.set(9.6, 3.9, 6.4);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+        const ctrl = new OrbitControls(cam, canvas);
+        ctrl.target.set(0.2, 1.25, -2.3); ctrl.enableDamping = true;
+        scene.add(new THREE.HemisphereLight(0xf7f4ee, 0x9aa3ae, 1.2));
+        scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+        const sun = new THREE.DirectionalLight(0xfff4e6, 1.8); sun.position.set(9,16,8); scene.add(sun);
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(22,6), new THREE.MeshStandardMaterial({ color:0xd2cdc4, roughness:0.55 }));
+        floor.rotation.x = -Math.PI/2; floor.position.set(0,0,-3); scene.add(floor);
+        const hall = new THREE.Mesh(new THREE.PlaneGeometry(80,80), new THREE.MeshStandardMaterial({ color:0xc4c9d2, roughness:0.92 }));
+        hall.rotation.x = -Math.PI/2; hall.position.y = -0.02; scene.add(hall);
+        const back = new THREE.Mesh(new THREE.BoxGeometry(22,3.4,0.08), new THREE.MeshStandardMaterial({ color:0x3a3542 }));
+        back.position.set(0,1.7,-6.02); scene.add(back);
+        const loader = new THREE.TextureLoader();
+        const logoTex = loader.load("logo.png");
+        const logo = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.86), new THREE.MeshBasicMaterial({ map: logoTex, transparent:true }));
+        logo.position.set(0, 3.38, 0.18); scene.add(logo);
+        function tower(x,z,color) {
+          const g = new THREE.Group();
+          for (let i=0;i<16;i++) {
+            const m = new THREE.Mesh(new THREE.BoxGeometry(0.04,3.5,0.12), new THREE.MeshStandardMaterial({ color, emissive:color, emissiveIntensity:0.8 }));
+            const a = (i/16)*Math.PI*2; m.position.set(Math.cos(a)*0.42, 1.75, Math.sin(a)*0.42); g.add(m);
+          }
+          g.position.set(x,0,z); scene.add(g);
+        }
+        function box(x,z,c) {
+          const m = new THREE.Mesh(new THREE.BoxGeometry(1.2,3.6,1.2), new THREE.MeshStandardMaterial({ color:c, emissive:c, emissiveIntensity:0.5 }));
+          m.position.set(x,1.8,z); scene.add(m);
+        }
+        const extras = new THREE.Group(); scene.add(extras);
+        three = { scene, cam, renderer, ctrl, extras, tower, box, THREE };
+        function resize() {
+          const w = canvas.clientWidth, h = canvas.clientHeight;
+          renderer.setSize(w,h,false); cam.aspect = w/Math.max(h,1); cam.updateProjectionMatrix();
+        }
+        addEventListener("resize", resize); resize();
+        (function loop(){ requestAnimationFrame(loop); ctrl.update(); renderer.render(scene,cam); })();
+        $("cams").addEventListener("click", (e) => {
+          const b = e.target.closest("[data-cam]"); if (!b) return;
+          const map = { hero:[9.6,3.9,6.4], aisle:[0,1.62,5.2], bird:[0,13.5,0.6], west:[-13.5,2.3,-2.5], east:[13.5,2.3,-2.5] };
+          const p = map[b.dataset.cam]; if (!p) return;
+          cam.position.set(...p); ctrl.target.set(0.2,1.25,-2.3);
+        });
+        paint3d();
+      } catch (err) {
+        console.warn(err);
+        canvas.hidden = true;
+        $("heroImg").style.opacity = "1";
+      }
+    }
+    function paint3d() {
+      if (!three) return;
+      const { extras, tower, box, THREE } = three;
+      extras.clear();
+      if (style==="aurora") { tower(-3.15,-1.15,0xff3daa); tower(3.25,-1.15,0x00e5ff); }
+      if (style==="volume") { box(-6.4,-1.4,0x00b4e8); box(6.5,-1.4,0x00b4e8); }
+      if (style==="spine") {
+        const r = new THREE.Mesh(new THREE.PlaneGeometry(21.2,0.1), new THREE.MeshBasicMaterial({ color:0x5ee0f0 }));
+        r.rotation.x = -Math.PI/2; r.position.set(0,0.02,-2.4); extras.add(r);
+      }
+    }
+
+    renderCards(); renderTabs(); setStyle("aurora"); setView("studio");
+  </script>
 </body>
 </html>
