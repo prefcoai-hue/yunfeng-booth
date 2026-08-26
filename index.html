@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yunfeng Booth｜雲峰展位</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --line: #243049;
+      --text: #e8eefc;
+      --muted: #9aa8c7;
+      --accent: #5b8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(900px 400px at 10% -10%, #1b2a4d 0%, transparent 55%),
+        var(--bg);
+      color: var(--text);
+    }
+    main {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--line);
+      background: #162036;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+    }
+    h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      line-height: 1.15;
+      margin: 18px 0 12px;
+    }
+    p { color: var(--muted); line-height: 1.7; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    article h2 { margin: 0 0 8px; font-size: 18px; }
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="badge">GitHub Actions 自動部署</span>
+    <h1>雲峰展位<br />Yunfeng Booth</h1>
+    <p>
+      這是 <code>yunfeng-booth</code> 的起始頁。推送到 <code>main</code> 後，
+      GitHub Actions 會自動發布到 GitHub Pages。
+    </p>
+    <section class="grid">
+      <article>
+        <h2>CI</h2>
+        <p>Pull Request 與每次推送都會檢查必要檔案是否齊全。</p>
+      </article>
+      <article>
+        <h2>Pages</h2>
+        <p>通過檢查後，靜態站會發布到 GitHub Pages。</p>
+      </article>
+      <article>
+        <h2>Docker / GHCR</h2>
+        <p>打上 <code>v*</code> 標籤可建置映像並推到 GitHub Container Registry。</p>
+      </article>
+    </section>
+    <footer>
+      prefcoai-hue / yunfeng-booth
+    </footer>
+  </main>
+</body>
+</html>
