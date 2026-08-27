@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>云風聯展 22×6 · Yunfeng Booth｜雲峰展位 · 展場視覺提案</title>
-  <meta name="description" content="云風實業 PREFCO-JOHNSONTECH 聯展提案。22×6 m、三種風格、多角度渲染自動輪播。" />
+  <meta name="description" content="云風實業 PREFCO-JOHNSONTECH 聯展提案。22×6 m、三種風格、多角度渲染手動切換。" />
   <link rel="icon" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -37,8 +37,7 @@
     .scard img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
     .scard .meta { padding: 12px 14px; display: flex; justify-content: space-between; gap: 8px; }
     .hero { position: relative; border-radius: 16px; overflow: hidden; background: #cfd6e0; min-height: 280px; box-shadow: 0 16px 40px rgba(22,24,31,.12); }
-    .hero img { width: 100%; height: min(70vh, 720px); min-height: 280px; object-fit: cover; display: block; animation: ken 9s ease-in-out infinite alternate; }
-    @keyframes ken { from { transform: scale(1); } to { transform: scale(1.05); } }
+    .hero img { width: 100%; height: min(70vh, 720px); min-height: 280px; object-fit: cover; display: block; }
     .badge { position: absolute; left: 16px; bottom: 16px; background: rgba(255,255,255,.92); padding: 10px 14px; border-radius: 10px; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 0 8px; }
     .chips button { height: 40px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: #fff; }
@@ -117,12 +116,12 @@
       <div class="hero">
         <img id="heroImg" src="img/aurora-overview.jpg" alt="極光織幕 3/4 總覽" />
         <div class="badge">
-          <p class="kicker" id="heroKicker">01 AURORA · 自動輪播</p>
+          <p class="kicker" id="heroKicker">01 AURORA · 手動切換</p>
           <strong id="heroLabel">3/4 總覽</strong>
         </div>
       </div>
       <div class="chips" id="cams"></div>
-      <p class="muted">畫面每 2.5 秒自動換角度。點視角可暫停。點上方三張風格卡可切換極光織幕 / 建築量體 / 能量脊骨。</p>
+      <p class="muted">點視角按鈕切換角度。點上方三張風格卡可切換極光織幕 / 建築量體 / 能量脊骨。</p>
     </section>
 
     <section class="panel" id="plan">
@@ -190,7 +189,7 @@
         <article class="card">
           <p class="kicker" style="color:var(--accent)">線上</p>
           <h3>遠端會議 · 螢幕分享</h3>
-          <p class="muted">把這個網址放到 Meet／Teams／Zoom。主畫面會自動輪播多角度。</p>
+          <p class="muted">把這個網址放到 Meet／Teams／Zoom。用風格卡與視角按鈕手動切畫面。</p>
         </article>
         <article class="card">
           <p class="kicker" style="color:var(--accent)">線下</p>
@@ -244,7 +243,6 @@
     let style = "aurora";
     let view = "studio";
     let shotI = 0;
-    let playing = true;
     let deckI = 0;
     const $ = (id) => document.getElementById(id);
     const shotsOf = () => STYLES[style].shots;
@@ -254,22 +252,20 @@
         `<button type="button" class="${i===shotI?"on":""}" data-shot="${i}">${label}</button>`
       ).join("");
     }
-    function showShot(i, pause) {
+    function showShot(i) {
       const list = shotsOf();
       shotI = (i + list.length) % list.length;
       const [label, src] = list[shotI];
       const img = $("heroImg");
       img.src = src;
       img.alt = STYLES[style].name + " " + label;
-      $("heroKicker").textContent = STYLES[style].index + " " + STYLES[style].en + (playing && !pause ? " · 自動輪播" : " · 已暫停");
+      $("heroKicker").textContent = STYLES[style].index + " " + STYLES[style].en + " · 手動切換";
       $("heroLabel").textContent = label;
       renderCams();
-      if (pause) playing = false;
     }
     function setStyle(id) {
       style = id;
       shotI = 0;
-      playing = true;
       document.querySelectorAll(".scard").forEach((el) => el.classList.toggle("on", el.dataset.style === id));
       showShot(0);
       if (view === "gallery") renderGallery();
@@ -309,7 +305,7 @@
     document.body.addEventListener("click", (e) => {
       const st = e.target.closest("[data-style]"); if (st) setStyle(st.dataset.style);
       const vw = e.target.closest("[data-view]"); if (vw) setView(vw.dataset.view);
-      const sh = e.target.closest("[data-shot]"); if (sh) showShot(Number(sh.dataset.shot), true);
+      const sh = e.target.closest("[data-shot]"); if (sh) showShot(Number(sh.dataset.shot));
       const shot = e.target.closest(".shot");
       if (shot) { const lb = $("lb"); lb.hidden = false; lb.querySelector("img").src = shot.dataset.src; }
     });
@@ -319,7 +315,6 @@
     $("copyBtn").onclick = function () {
       navigator.clipboard.writeText("https://prefcoai-hue.github.io/yunfeng-booth/").then(() => { this.textContent = "已複製"; });
     };
-    setInterval(() => { if (playing && view === "studio") showShot(shotI + 1); }, 2500);
     renderCams();
     renderGallery();
     renderDeck();
