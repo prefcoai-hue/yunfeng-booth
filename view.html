@@ -59,7 +59,9 @@
     nav button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
     .panel { display: none; }
     .panel.on { display: block; }
-    .lightbox { position: fixed; inset: 0; background: rgba(20,22,28,.88); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+    .lightbox { position: fixed; inset: 0; background: rgba(20,22,28,.88); align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+    .lightbox:not([hidden]) { display: flex; }
+    [hidden] { display: none !important; }
     .lightbox img { max-width: 100%; max-height: 92vh; border-radius: 8px; }
     @media print { nav, .no-print { display: none !important; } .panel { display: block !important; break-after: page; } }
   </style>
@@ -75,7 +77,7 @@
         </div>
       </div>
       <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a class="btn" href="https://prefcoai-hue.github.io/yunfeng-booth/">固定網址</a>
+        <a class="btn" href="yunfeng-booth-offline.html" download="云風聯展-展場提案.html">下載離線 HTML</a>
         <button class="btn" type="button" id="copyBtn">複製網址</button>
         <button class="btn primary" type="button" data-view="pitch">提案簡報</button>
         <button class="btn" type="button" onclick="window.print()">存 PDF</button>
